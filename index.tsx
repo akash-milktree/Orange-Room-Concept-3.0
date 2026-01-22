@@ -20,8 +20,10 @@ import {
   Camera,
   Mail,
   X,
-  Ticket
+  Ticket,
+  Sparkles
 } from 'lucide-react';
+import { GoogleGenAI } from "@google/genai";
 
 // --- Types ---
 type Page = 'HOME' | 'EVENTS' | 'BRUNCH' | 'DRINKS' | 'BOOK' | 'PRIVATE_HIRE' | 'GALLERY' | 'CONTACT' | 'LEGAL';
@@ -44,7 +46,7 @@ const Button = ({ children, onClick, variant = 'primary', className = '' }: { ch
 };
 
 const PageHero = ({ title, subtitle, videoSrc, imageSrc, children }: { title: string, subtitle?: string, videoSrc?: string, imageSrc?: string, children?: React.ReactNode }) => (
-  <section className="relative pt-32 pb-20 bg-[#2d0a14] overflow-hidden min-h-[60vh] flex flex-col items-center justify-center text-center">
+  <section className="relative pt-20 bg-[#2d0a14] overflow-hidden min-h-screen flex flex-col items-center justify-center text-center">
     <div className="absolute inset-0 w-full h-full z-0">
       {videoSrc ? (
         <video autoPlay loop muted playsInline className="w-full h-full object-cover">
@@ -317,39 +319,103 @@ const FeatureTabs = () => {
   );
 };
 
-const FAQ = () => (
-  <section className="bg-[#2d0a14] py-32 px-6">
-    <div className="container mx-auto max-w-4xl">
-      <div className="text-center mb-16">
-        <div className="flex items-center justify-center space-x-2 mb-2">
-          <Minus className="w-4 h-4 text-[#f97316]" />
-          <p className="text-white text-xs font-black uppercase tracking-[0.4em]">Browse Our</p>
-          <Minus className="w-4 h-4 text-[#f97316]" />
-        </div>
-        <h2 className="text-7xl md:text-9xl font-black text-[#f97316] uppercase tracking-tighter leading-none italic">FAQ'S</h2>
-      </div>
-      <div className="space-y-6">
-        {[1,2,3].map(i => (
-          <div key={i} className="bg-[#1a050b] p-8 rounded-2xl border-4 border-white/5 flex items-center justify-between group cursor-pointer hover:border-[#f97316]/40 transition-all">
-            <span className="text-white text-sm md:text-xl font-black uppercase tracking-tight">WHAT ARE THE INGREDIENTS IN ORANGE ROOMS VIBES?</span>
-            <ChevronRight className="w-6 h-6 text-white group-hover:rotate-90 transition-transform group-hover:text-[#f97316]" />
+// --- FAQ with AI Integration ---
+
+const FAQ = () => {
+  const [query, setQuery] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // AI Vibe Concierge interaction following latest SDK guidelines
+  const askConcierge = async () => {
+    if (!query.trim()) return;
+    setLoading(true);
+    setAnswer('');
+    
+    // Always initialize a fresh instance before making a call
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    
+    try {
+      const response = await ai.models.generateContent({
+        model: 'gemini-3-flash-preview',
+        contents: query,
+        config: {
+          systemInstruction: "You are the AI Vibe Concierge at Orange Rooms Southampton. Be enthusiastic, edgy, and helpful. Use emojis. Keep answers focused on nightlife, drinks, and events at Orange Rooms. Be very concise and cool.",
+        },
+      });
+      // Correct usage of .text property
+      setAnswer(response.text || "The vibe is slightly distorted. Try asking again!");
+    } catch (e) {
+      setAnswer("Our vibe sensors are temporarily offline. Catch us on the dance floor!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section className="bg-[#2d0a14] py-32 px-6">
+      <div className="container mx-auto max-w-4xl">
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            <Minus className="w-4 h-4 text-[#f97316]" />
+            <p className="text-white text-xs font-black uppercase tracking-[0.4em]">Browse Our</p>
+            <Minus className="w-4 h-4 text-[#f97316]" />
           </div>
-        ))}
-      </div>
-      <div className="mt-32 text-center">
-        <div className="flex items-center justify-center space-x-2 mb-2">
-          <Plus className="w-4 h-4 text-[#f97316]" />
-          <p className="text-white text-xs font-black uppercase tracking-[0.4em]">Still</p>
-          <Plus className="w-4 h-4 text-[#f97316]" />
+          <h2 className="text-7xl md:text-9xl font-black text-[#f97316] uppercase tracking-tighter leading-none italic">FAQ'S</h2>
         </div>
-        <h2 className="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none italic mb-12">HAVE <br/> QUESTIONS?</h2>
-        <div className="flex justify-center">
-          <Button variant="primary" className="!px-16">Find Help <Plus className="inline w-3 h-3 ml-2" /></Button>
+
+        {/* Gemini powered Concierge UI */}
+        <div className="mb-20 bg-[#1a050b] p-8 md:p-12 rounded-[3rem] border-4 border-[#f97316]/20 relative">
+          <h3 className="text-white text-2xl font-black uppercase mb-6 flex items-center gap-3 italic">
+            <Sparkles className="w-6 h-6 text-[#f97316]" /> AI Vibe Concierge
+          </h3>
+          <p className="text-white/60 text-xs font-bold uppercase mb-8 tracking-widest">Ask about drinks, dress code, or event vibes.</p>
+          <div className="flex flex-col md:flex-row gap-4">
+            <input 
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && askConcierge()}
+              placeholder="What's the dress code tonight?..." 
+              className="flex-1 bg-white/5 border-2 border-white/10 p-4 rounded-full text-white outline-none focus:border-[#f97316] font-bold uppercase tracking-widest text-xs"
+            />
+            <Button onClick={askConcierge} className="!px-10">
+              {loading ? 'Analyzing...' : 'Ask Vibe Concierge'}
+            </Button>
+          </div>
+          {answer && (
+            <div className="mt-8 p-6 bg-[#f97316]/10 rounded-2xl border border-[#f97316]/30 text-white font-bold animate-in fade-in slide-in-from-top-4 tracking-wide uppercase text-sm">
+              {answer}
+            </div>
+          )}
+        </div>
+
+        <div className="space-y-6">
+          {[
+            "WHAT ARE THE INGREDIENTS IN ORANGE ROOMS VIBES?",
+            "WHAT IS THE DRESS CODE FOR SATURDAYS?",
+            "DO YOU HOST PRIVATE EVENTS?"
+          ].map((q, i) => (
+            <div key={i} className="bg-[#1a050b] p-8 rounded-2xl border-4 border-white/5 flex items-center justify-between group cursor-pointer hover:border-[#f97316]/40 transition-all">
+              <span className="text-white text-sm md:text-xl font-black uppercase tracking-tight">{q}</span>
+              <ChevronRight className="w-6 h-6 text-white group-hover:rotate-90 transition-transform group-hover:text-[#f97316]" />
+            </div>
+          ))}
+        </div>
+        <div className="mt-32 text-center">
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            <Plus className="w-4 h-4 text-[#f97316]" />
+            <p className="text-white text-xs font-black uppercase tracking-[0.4em]">Still</p>
+            <Plus className="w-4 h-4 text-[#f97316]" />
+          </div>
+          <h2 className="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none italic mb-12">HAVE <br/> QUESTIONS?</h2>
+          <div className="flex justify-center">
+            <Button variant="primary" className="!px-16">Find Help <Plus className="inline w-3 h-3 ml-2" /></Button>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const MeatLocator = () => (
   <section className="bg-[#2d0a14] py-32 px-6">
@@ -799,5 +865,9 @@ const App = () => {
   );
 };
 
-const root = createRoot(document.getElementById('root')!);
-root.render(<App />);
+// Fix: Removed file markers and initialized the React root properly
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container);
+  root.render(<App />);
+}
