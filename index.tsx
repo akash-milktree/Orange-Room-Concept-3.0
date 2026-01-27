@@ -50,7 +50,14 @@ const PageHero = ({ title, subtitle, videoSrc, imageSrc, children }: { title: st
   <section className="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
     <div className="absolute inset-0 w-full h-full z-0">
       {videoSrc ? (
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover scale-105 animate-slow-zoom">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover scale-105 animate-slow-zoom"
+          poster={imageSrc} // Use image as fallback/poster
+        >
           <source src={videoSrc} type="video/mp4" />
         </video>
       ) : (
@@ -106,6 +113,7 @@ const Header = ({ currentView, setView }: { currentView: Page, setView: (p: Page
       <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrolled ? 'h-20 glass border-b border-white/5' : 'h-28 bg-transparent'}`}>
         <div className="container mx-auto h-full px-6 flex items-center justify-between">
           <div className="flex items-center gap-12">
+            {/* Logo Replaced with Text for Visibility */}
             <img
               src="/logo.png"
               alt="ORANGE ROOMS"
@@ -187,18 +195,36 @@ const CategoryShowcase = () => {
   const [activeCategory, setActiveCategory] = useState('LOUNGE');
 
   const layers = [
-    { id: 'GARDEN', title: 'NEON GARDEN', desc: 'Sip under the stars in our lush outdoor paradise.', image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?q=80&w=1200' },
-    { id: 'LOUNGE', title: 'VELVET LOUNGE', desc: 'Indulge in craft cocktails and deep house vibes.', image: 'https://images.unsplash.com/photo-1574096079513-d8259312b785?q=80&w=1200' },
-    { id: 'CLUB', title: 'MAIN ROOM', desc: 'The heartbeat of Southampton nightlife.', image: 'https://images.unsplash.com/photo-1565034946487-077786996e27?q=80&w=1200' },
+    {
+      id: 'GARDEN',
+      title: 'NEON GARDEN',
+      desc: 'Sip under the stars in our lush outdoor paradise.',
+      image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?q=80&w=1200',
+      features: ['Heated Booths', 'Tiki Bar Access', 'Fire Pit']
+    },
+    {
+      id: 'LOUNGE',
+      title: 'VELVET LOUNGE',
+      desc: 'Indulge in craft cocktails and deep house vibes.',
+      image: 'https://images.unsplash.com/photo-1574096079513-d8259312b785?q=80&w=1200',
+      features: ['Premium Cocktails', 'Table Service', 'Chill Vibes']
+    },
+    {
+      id: 'CLUB',
+      title: 'MAIN ROOM',
+      desc: 'The heartbeat of Southampton nightlife.',
+      image: 'https://images.unsplash.com/photo-1565034946487-077786996e27?q=80&w=1200',
+      features: ['VIP Booths', 'Bottle Service', 'Dance Floor']
+    },
   ];
 
   return (
-    <section className="bg-[#050505] py-32 overflow-hidden border-t border-white/5">
+    <section className="bg-[#2b2b2b] py-32 overflow-hidden border-t border-white/5">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="max-w-2xl">
             <p className="text-[#f29100] text-sm font-black uppercase tracking-[0.4em] mb-6">Choose Your Atmosphere</p>
-            <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none italic">THE <br /> SPACES</h2>
+            <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none italic">THE SPACES</h2>
           </div>
           <div className="flex gap-4">
             {layers.map((l) => (
@@ -234,7 +260,7 @@ const CategoryShowcase = () => {
             <div className="p-10 rounded-[2.5rem] bg-[#0A0A0A] border border-white/5">
               <h4 className="text-[#f29100] font-black uppercase tracking-widest mb-6">Available Tonight</h4>
               <ul className="space-y-4">
-                {['VIP Booths', 'Spirit Packages', 'Guestlist Entry'].map((item) => (
+                {layers.find(l => l.id === activeCategory)?.features.map((item) => (
                   <li key={item} className="flex items-center justify-between text-white font-bold uppercase text-sm border-b border-white/5 pb-4">
                     <span>{item}</span>
                     <Plus className="w-4 h-4 text-[#f29100]" />
@@ -252,16 +278,17 @@ const CategoryShowcase = () => {
 
 const Highlights = ({ setView }: { setView: (p: Page) => void }) => {
   return (
-    <section className="bg-[#050505] py-32 px-6">
+    <section className="bg-[#2b2b2b] py-40 px-6">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* Bottomless Highlight */}
-          <div className="relative aspect-[4/5] md:aspect-auto md:h-[600px] rounded-[3rem] overflow-hidden group cursor-pointer" onClick={() => setView('BRUNCH')}>
-            <img src="https://images.unsplash.com/photo-1525268771113-32d9e9bb2d40?q=80&w=1200" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" alt="" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-            <div className="absolute bottom-12 left-12 right-12">
-              <span className="bg-[#f29100] text-black px-4 py-1 text-[12px] font-black uppercase rounded-full mb-6 inline-block">Saturdays & Sundays</span>
-              <h3 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter mb-8 leading-none">BOTTOMLESS <br /> BRUNCH</h3>
+          <div className="relative h-[650px] rounded-[3rem] overflow-hidden group cursor-pointer shadow-2xl" onClick={() => setView('BRUNCH')}>
+            <img src="https://images.unsplash.com/photo-1525268771113-32d9e9bb2d40?q=80&w=1200" className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110" alt="" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-[#f29100]/0 group-hover:bg-[#f29100]/10 transition-all duration-500" />
+            <div className="absolute bottom-12 left-12 right-12 transform transition-transform duration-500 group-hover:translate-y-[-8px]">
+              <span className="bg-[#f29100] text-black px-5 py-2 text-[11px] font-black uppercase rounded-full mb-6 inline-block shadow-lg">Saturdays & Sundays</span>
+              <h3 className="text-5xl md:text-6xl font-black text-white uppercase italic tracking-tighter mb-6 leading-none">BOTTOMLESS <br /> BRUNCH</h3>
               <Button variant="outline" className="!border-white/40 !text-white group-hover:!bg-[#f29100] group-hover:!border-[#f29100] group-hover:!text-black transition-all">
                 VIEW OFFER <ArrowRight className="w-4 h-4" />
               </Button>
@@ -269,12 +296,13 @@ const Highlights = ({ setView }: { setView: (p: Page) => void }) => {
           </div>
 
           {/* Events Highlight */}
-          <div className="relative aspect-[4/5] md:aspect-auto md:h-[700px] rounded-[3rem] overflow-hidden group cursor-pointer" onClick={() => setView('EVENTS')}>
-            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" alt="" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-            <div className="absolute bottom-12 left-12 right-12">
-              <span className="bg-white text-black px-4 py-1 text-[12px] font-black uppercase rounded-full mb-6 inline-block">Upcoming</span>
-              <h3 className="text-5xl md:text-7xl font-black text-white uppercase italic tracking-tighter mb-8 leading-none">THE <br /> LINEUP</h3>
+          <div className="relative h-[650px] rounded-[3rem] overflow-hidden group cursor-pointer shadow-2xl" onClick={() => setView('EVENTS')}>
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200" className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110" alt="" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-all duration-500" />
+            <div className="absolute bottom-12 left-12 right-12 transform transition-transform duration-500 group-hover:translate-y-[-8px]">
+              <span className="bg-white text-black px-5 py-2 text-[11px] font-black uppercase rounded-full mb-6 inline-block shadow-lg">Upcoming</span>
+              <h3 className="text-5xl md:text-6xl font-black text-white uppercase italic tracking-tighter mb-6 leading-none">THE <br /> LINEUP</h3>
               <Button variant="outline" className="!border-white/40 !text-white group-hover:!bg-white group-hover:!border-white group-hover:!text-black transition-all">
                 WHAT'S ON <ArrowRight className="w-4 h-4" />
               </Button>
@@ -454,7 +482,8 @@ const HomePage = ({ setView }: { setView: (p: Page) => void }) => {
       <PageHero
         title="ORANGE ROOMS"
         subtitle="ESTABLISHED 2001"
-        imageSrc="hero_cocktail_orange_1769116896978.png"
+        imageSrc="https://images.unsplash.com/photo-1536935338788-843bb52887f8?q=80&w=1920"
+        videoSrc="https://www.orangerooms.co.uk/wp-content/uploads/2024/02/x2mate.com-Orange-Rooms-Cocktails-LG-1080p.mp4"
       >
         <div className="mt-8 flex flex-wrap justify-center gap-6">
           <Button onClick={() => setView('BOOK')} className="!py-5 !px-16 shadow-[0_0_50px_rgba(242,145,0,0.3)]">
