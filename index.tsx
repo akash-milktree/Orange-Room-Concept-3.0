@@ -21,12 +21,14 @@ import {
   Mail,
   X,
   Ticket,
-  Sparkles
+  Sparkles,
+  Linkedin,
+  Twitter
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 // --- Types ---
-type Page = 'HOME' | 'EVENTS' | 'BRUNCH' | 'DRINKS' | 'BOOK' | 'PRIVATE_HIRE' | 'GALLERY' | 'CONTACT' | 'LEGAL' | 'DESIGN';
+type Page = 'HOME' | 'EVENTS' | 'BRUNCH' | 'DRINKS' | 'FOOD' | 'BOOK' | 'PRIVATE_HIRE' | 'GALLERY' | 'CONTACT' | 'LEGAL' | 'DESIGN';
 
 // --- Shared UI Components ---
 
@@ -103,9 +105,8 @@ const Header = ({ currentView, setView }: { currentView: Page, setView: (p: Page
     { label: "Events", view: 'EVENTS' },
     { label: "Bottomless", view: 'BRUNCH' },
     { label: "Drinks", view: 'DRINKS' },
+  { label: "Food", view: 'FOOD' },
     { label: "Private Hire", view: 'PRIVATE_HIRE' },
-    { label: "Gallery", view: 'GALLERY' },
-    { label: "Contact", view: 'CONTACT' },
   ];
 
   return (
@@ -192,7 +193,7 @@ const Header = ({ currentView, setView }: { currentView: Page, setView: (p: Page
 // --- Homepage Sections ---
 
 const CategoryShowcase = () => {
-  const [activeCategory, setActiveCategory] = useState('LOUNGE');
+  const [activeCategory, setActiveCategory] = useState('GARDEN');
 
   const layers = [
     {
@@ -219,7 +220,7 @@ const CategoryShowcase = () => {
   ];
 
   return (
-    <section className="bg-[#2b2b2b] py-32 overflow-hidden border-t border-white/5">
+    <section className="bg-[#412B1D] pt-32 pb-10 overflow-hidden border-t border-white/5">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="max-w-2xl">
@@ -239,7 +240,7 @@ const CategoryShowcase = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
           <div className="lg:col-span-8 relative rounded-[3rem] overflow-hidden aspect-[16/9] group">
             <img
               src={layers.find(l => l.id === activeCategory)?.image}
@@ -256,17 +257,19 @@ const CategoryShowcase = () => {
               </p>
             </div>
           </div>
-          <div className="lg:col-span-4 space-y-8">
-            <div className="p-10 rounded-[2.5rem] bg-[#0A0A0A] border border-white/5">
-              <h4 className="text-[#f29100] font-black uppercase tracking-widest mb-6">Available Tonight</h4>
-              <ul className="space-y-4">
-                {layers.find(l => l.id === activeCategory)?.features.map((item) => (
-                  <li key={item} className="flex items-center justify-between text-white font-bold uppercase text-sm border-b border-white/5 pb-4">
-                    <span>{item}</span>
-                    <Plus className="w-4 h-4 text-[#f29100]" />
-                  </li>
-                ))}
-              </ul>
+          <div className="lg:col-span-4 flex">
+            <div className="p-10 rounded-[2.5rem] bg-[#0A0A0A] border border-white/5 flex flex-col justify-between w-full">
+              <div>
+                <h4 className="text-[#f29100] font-black uppercase tracking-widest mb-6">Available Tonight</h4>
+                <ul className="space-y-4">
+                  {layers.find(l => l.id === activeCategory)?.features.map((item) => (
+                    <li key={item} className="flex items-center justify-between text-white font-bold uppercase text-sm border-b border-white/5 pb-4">
+                      <span>{item}</span>
+                      <Plus className="w-4 h-4 text-[#f29100]" />
+                    </li>
+                  ))}
+                </ul>
+              </div>
               <Button variant="primary" className="w-full mt-12 !py-5">RESERVE THIS SPACE</Button>
             </div>
           </div>
@@ -276,14 +279,40 @@ const CategoryShowcase = () => {
   );
 };
 
+const BrandStrip = () => {
+  const logos = [
+    { src: '/Vector1.png', alt: 'Tiki Lounge' },
+    { src: '/Vector2.png', alt: 'Off Piste' },
+    { src: '/Vector3.png', alt: 'Mile High' },
+    { src: '/Vector4.png', alt: 'Outside Orange' },
+  ];
+
+  return (
+    <section className="bg-[#412B1D] border-t border-white/5">
+      <div className="container mx-auto px-6 py-16 md:py-20">
+        <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16 opacity-80">
+          {logos.map((logo) => (
+            <img
+              key={logo.alt}
+              src={logo.src}
+              alt={logo.alt}
+              className="h-12 md:h-16 w-auto object-contain"
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Highlights = ({ setView }: { setView: (p: Page) => void }) => {
   return (
-    <section className="bg-[#2b2b2b] py-40 px-6">
+    <section className="bg-[#412B1D] pt-10 pb-40 px-6">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* Bottomless Highlight */}
           <div className="relative h-[650px] rounded-[3rem] overflow-hidden group cursor-pointer shadow-2xl" onClick={() => setView('BRUNCH')}>
-            <img src="https://images.unsplash.com/photo-1525268771113-32d9e9bb2d40?q=80&w=1200" className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110" alt="" />
+            <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=1200" className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110" alt="" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
             <div className="absolute inset-0 bg-[#f29100]/0 group-hover:bg-[#f29100]/10 transition-all duration-500" />
             <div className="absolute bottom-12 left-12 right-12 transform transition-transform duration-500 group-hover:translate-y-[-8px]">
@@ -314,24 +343,137 @@ const Highlights = ({ setView }: { setView: (p: Page) => void }) => {
   );
 };
 
-const MissionSection = () => (
-  <section className="bg-[#f29100] py-40 px-6 text-center overflow-hidden relative">
-    {/* Decorative Elements */}
-    <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-[#050505] to-transparent opacity-20" />
-    <div className="container mx-auto max-w-5xl">
-      <p className="text-black text-sm font-black uppercase tracking-[0.5em] mb-8 animate-fade-in">The Orange Philosophy</p>
-      <h2 className="text-4xl md:text-7xl font-black text-black uppercase tracking-tighter leading-[0.85] italic mb-12">
-        EST. 2001 <br /> IN SOUTHAMPTON
-      </h2>
-      <p className="text-black text-xl md:text-3xl font-black max-w-3xl mx-auto leading-tight uppercase italic">
-        "WE PROVIDE THE VIBE. <br className="hidden md:block" /> YOU PROVIDE THE RIDICULOUS MEMORIES."
-      </p>
-      <div className="mt-16 flex justify-center gap-4">
-        {[...Array(3)].map((_, i) => <Plus key={i} className="w-8 h-8 text-black opacity-20" />)}
+const MissionSection = () => {
+  const carouselImages = [
+    'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800',
+    'https://images.unsplash.com/photo-1543007630-9710e4a00a20?q=80&w=800',
+    'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800',
+    'https://images.unsplash.com/photo-1565034946487-077786996e27?q=80&w=800',
+    'https://images.unsplash.com/photo-1574096079513-d8259312b785?q=80&w=800',
+    'https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=800',
+    'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=800',
+    'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=800',
+  ];
+
+  const ScrollingCarousel = ({ direction = 'ltr' }: { direction?: 'ltr' | 'rtl' }) => {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+
+    useEffect(() => {
+      const scrollContainer = scrollRef.current;
+      if (!scrollContainer || isPaused || isDragging) return;
+
+      const scrollSpeed = direction === 'ltr' ? 1 : -1;
+      let animationId: number;
+
+      const scroll = () => {
+        if (scrollContainer) {
+          scrollContainer.scrollLeft += scrollSpeed;
+
+          // Reset scroll for infinite loop
+          if (direction === 'ltr' && scrollContainer.scrollLeft >= scrollContainer.scrollWidth / 2) {
+            scrollContainer.scrollLeft = 0;
+          } else if (direction === 'rtl' && scrollContainer.scrollLeft <= 0) {
+            scrollContainer.scrollLeft = scrollContainer.scrollWidth / 2;
+          }
+        }
+        animationId = requestAnimationFrame(scroll);
+      };
+
+      animationId = requestAnimationFrame(scroll);
+      return () => cancelAnimationFrame(animationId);
+    }, [direction, isPaused, isDragging]);
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+      setIsDragging(true);
+      setStartX(e.pageX - (scrollRef.current?.offsetLeft || 0));
+      setScrollLeft(scrollRef.current?.scrollLeft || 0);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - (scrollRef.current?.offsetLeft || 0);
+      const walk = (x - startX) * 2;
+      if (scrollRef.current) {
+        scrollRef.current.scrollLeft = scrollLeft - walk;
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+      setIsDragging(true);
+      setStartX(e.touches[0].pageX - (scrollRef.current?.offsetLeft || 0));
+      setScrollLeft(scrollRef.current?.scrollLeft || 0);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+      if (!isDragging) return;
+      const x = e.touches[0].pageX - (scrollRef.current?.offsetLeft || 0);
+      const walk = (x - startX) * 2;
+      if (scrollRef.current) {
+        scrollRef.current.scrollLeft = scrollLeft - walk;
+      }
+    };
+
+    return (
+      <div
+        ref={scrollRef}
+        className="flex gap-6 overflow-x-hidden cursor-grab active:cursor-grabbing select-none"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => { setIsPaused(false); setIsDragging(false); }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={() => setIsDragging(false)}
+      >
+        {/* Duplicate images for infinite scroll */}
+        {[...carouselImages, ...carouselImages].map((img, idx) => (
+          <div key={idx} className="flex-shrink-0 w-80 h-64 rounded-3xl overflow-hidden shadow-2xl">
+            <img
+              src={img}
+              className="w-full h-full object-cover pointer-events-none"
+              alt=""
+              draggable="false"
+            />
+          </div>
+        ))}
       </div>
-    </div>
-  </section>
-);
+    );
+  };
+
+  return (
+    <section className="bg-[#f29100] py-20 px-6 overflow-hidden relative">
+      {/* Centered Content */}
+      <div className="container mx-auto max-w-5xl text-center mb-16">
+        <p className="text-black text-xs font-black uppercase tracking-[0.5em] mb-6">The Orange Philosophy</p>
+        <h2 className="text-5xl md:text-7xl font-black text-black uppercase tracking-tighter leading-[0.9] italic mb-8">
+          EST. 2001<br />IN SOUTHAMPTON
+        </h2>
+        <p className="text-black text-2xl md:text-3xl font-black leading-tight uppercase italic mb-8">
+          "WE PROVIDE THE VIBE.<br />YOU PROVIDE THE RIDICULOUS MEMORIES."
+        </p>
+        <div className="flex justify-center gap-3">
+          {[...Array(5)].map((_, i) => <div key={i} className="w-3 h-3 bg-black rounded-full opacity-30" />)}
+        </div>
+      </div>
+
+      {/* Scrolling Carousels */}
+      <div className="space-y-8">
+        <ScrollingCarousel direction="ltr" />
+        <ScrollingCarousel direction="rtl" />
+      </div>
+    </section>
+  );
+};
 
 const ExperienceTabs = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -343,7 +485,7 @@ const ExperienceTabs = () => {
   ];
 
   return (
-    <section className="bg-[#050505] py-32 px-6 border-t border-white/5">
+    <section className="bg-[#412B1D] py-32 px-6 border-t border-white/5">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <div className="space-y-4">
@@ -385,21 +527,26 @@ const ExperienceTabs = () => {
 // --- FAQ with AI Integration ---
 
 const FAQ = () => {
-  const [query, setQuery] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const askConcierge = async () => {
-    if (!query.trim()) return;
-    setLoading(true);
-    setAnswer('');
-
-    // Simulating AI response for now to avoid ENV issues in demo
-    setTimeout(() => {
-      setAnswer("The vibe at Orange Rooms is legendary! Tonight we've got happy hour until 9pm and the dance floor is heating up at 10pm. Dress code: Dress to impress, but keep it edgy. 🍸🔥");
-      setLoading(false);
-    }, 1500);
-  };
+  const faqs = [
+    {
+      question: "DRESS CODE POLICY",
+      answer: "Smart casual. No tracksuits, gym wear, or flip flops. We encourage you to dress to impress, but keep it comfortable enough to dance!"
+    },
+    {
+      question: "BOOKING DEPOSITS",
+      answer: "We require a small deposit per person for all table bookings to secure your space. This is fully redeemable against your bill on the night."
+    },
+    {
+      question: "AGE RESTRICTIONS",
+      answer: "We are an 18+ venue. Valid physical photo ID (Passport or Driving License) is required for entry. We operate a Challenge 25 policy."
+    },
+    {
+      question: "LOST PROPERTY",
+      answer: "Left something behind? Email us at info@orangerooms.co.uk with a description of the item and when you visited. We keep lost property for 14 days."
+    }
+  ];
 
   return (
     <section className="bg-[#050505] py-32 px-6">
@@ -409,41 +556,25 @@ const FAQ = () => {
           <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none italic">FAQ</h2>
         </div>
 
-        <div className="mb-20 glass p-10 md:p-16 rounded-[3rem] relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[#f29100]/10 blur-[50px]" />
-          <h3 className="text-white text-3xl font-black uppercase mb-8 flex items-center gap-4 italic font-black">
-            <Sparkles className="w-8 h-8 text-[#f29100]" /> AI CONCIERGE
-          </h3>
-          <div className="flex flex-col md:flex-row gap-4">
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && askConcierge()}
-              placeholder="ASK ABOUT THE VIBE..."
-              className="flex-1 bg-white/5 border border-white/10 p-6 rounded-2xl text-white outline-none focus:border-[#f29100] font-bold uppercase tracking-widest text-sm"
-            />
-            <Button onClick={askConcierge} className="!px-10">
-              {loading ? 'WAIT...' : 'ASK'}
-            </Button>
-          </div>
-          {answer && (
-            <div className="mt-12 p-8 bg-[#f29100]/5 rounded-3xl border border-[#f29100]/20 text-white font-bold animate-fade-in tracking-wide uppercase text-sm leading-relaxed">
-              {answer}
-            </div>
-          )}
-        </div>
-
         <div className="space-y-4">
-          {[
-            "DRESS CODE POLICY",
-            "BOOKING DEPOSITS",
-            "AGE RESTRICTIONS",
-            "LOST PROPERTY"
-          ].map((q, i) => (
-            <div key={i} className="bg-[#0A0A0A] p-8 rounded-3xl border border-white/5 flex items-center justify-between group cursor-pointer hover:border-[#f29100]/40 transition-all">
-              <span className="text-white text-xl font-black uppercase italic tracking-tighter">{q}</span>
-              <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-[#f29100] group-hover:border-[#f29100] transition-all">
-                <Plus className="w-4 h-4 text-white group-hover:text-black" />
+          {faqs.map((item, i) => (
+            <div
+              key={i}
+              className={`bg-[#0A0A0A] rounded-3xl border border-white/5 overflow-hidden transition-all duration-300 ${openIndex === i ? 'border-[#f29100]/40 bg-white/5' : 'hover:border-[#f29100]/40'}`}
+            >
+              <button
+                onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                className="w-full p-8 flex items-center justify-between cursor-pointer"
+              >
+                <span className="text-white text-xl font-black uppercase italic tracking-tighter text-left">{item.question}</span>
+                <div className={`w-10 h-10 rounded-full border border-white/10 flex items-center justify-center transition-all duration-300 ${openIndex === i ? 'bg-[#f29100] border-[#f29100] rotate-45' : 'group-hover:border-[#f29100]'}`}>
+                  <Plus className={`w-4 h-4 transition-colors ${openIndex === i ? 'text-black' : 'text-white'}`} />
+                </div>
+              </button>
+              <div
+                className={`px-8 overflow-hidden transition-all duration-300 ease-in-out ${openIndex === i ? 'max-h-40 pb-8 opacity-100' : 'max-h-0 opacity-0'}`}
+              >
+                <p className="text-white/60 font-bold leading-relaxed">{item.answer}</p>
               </div>
             </div>
           ))}
@@ -454,19 +585,25 @@ const FAQ = () => {
 };
 
 const MeatLocator = () => (
-  <section className="bg-[#050505] py-32 px-6">
+  <section className="bg-[#050505] pb-32 pt-10 px-6">
     <div className="container mx-auto">
-      <div className="bg-[#0A0A0A] rounded-[4rem] overflow-hidden p-12 md:p-24 text-center border border-white/5 relative">
-        <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1200')] bg-cover grayscale mix-blend-overlay" />
+      <div className="bg-[#0A0A0A] rounded-[4rem] overflow-hidden p-12 md:p-24 text-center border border-white/5 relative group">
+        <div className="absolute inset-0 opacity-40 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200')] bg-cover bg-center grayscale mix-blend-overlay transition-transform duration-700 group-hover:scale-105" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-[#0A0A0A]/80" />
+
         <div className="relative z-10">
           <p className="text-[#f29100] text-sm font-black uppercase tracking-[0.4em] mb-6">Find The Vibe</p>
-          <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none italic mb-12">SOUTHAMPTON</h2>
-          <p className="text-white/60 text-lg md:text-2xl font-bold max-w-2xl mx-auto mb-16 uppercase tracking-wider italic font-bold">
+          <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none italic mb-8">SOUTHAMPTON</h2>
+          <p className="text-white/80 text-lg md:text-2xl font-bold max-w-2xl mx-auto mb-12 uppercase tracking-wider italic">
             1-2 Vernon Walk, Southampton. SO15 2EJ
           </p>
           <div className="flex flex-wrap justify-center gap-6">
-            <Button variant="primary" className="!px-16">GET DIRECTIONS</Button>
-            <Button variant="outline" className="!px-16">CALL US</Button>
+            <Button variant="primary" className="!px-16 !py-5 shadow-xl shadow-[#f29100]/20" onClick={() => window.open('https://maps.google.com/?q=Orange+Rooms+Southampton', '_blank')}>
+              GET DIRECTIONS <MapPin className="w-5 h-5 ml-2" />
+            </Button>
+            <Button variant="outline" className="!px-16 !py-5" onClick={() => window.location.href = 'tel:02380232333'}>
+              023 8023 2333 <Phone className="w-5 h-5 ml-2" />
+            </Button>
           </div>
         </div>
       </div>
@@ -494,6 +631,7 @@ const HomePage = ({ setView }: { setView: (p: Page) => void }) => {
           </Button>
         </div>
       </PageHero>
+      <BrandStrip />
       <CategoryShowcase />
       <Highlights setView={setView} />
       <MissionSection />
@@ -506,35 +644,34 @@ const HomePage = ({ setView }: { setView: (p: Page) => void }) => {
 
 const EventsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const containerId = 'fixr-widget-container';
+  const containerId = 'fixr-shop-widget-container';
 
   useEffect(() => {
-    const initWidget = () => {
-      const FixrWidget = (window as any).FixrWidget;
-      if (FixrWidget) {
-        const container = document.getElementById(containerId);
-        if (container) container.innerHTML = '';
-        try {
-          FixrWidget.create({ containerId, shopSlug: 'orange-rooms', theme: 'dark' });
-          setTimeout(() => setIsLoading(false), 1000);
-        } catch (e) {
-          setIsLoading(false);
-        }
-      }
-    };
+    const scriptId = 'fixr-shop-script';
+    const container = document.getElementById(containerId);
 
-    const scriptId = 'fixr-script';
-    let script = document.getElementById(scriptId) as HTMLScriptElement;
-    if (!script) {
-      script = document.createElement('script');
-      script.id = scriptId;
-      script.src = "https://fixr.co/widget/fixr-widget.js";
-      script.async = true;
-      script.onload = initWidget;
-      document.body.appendChild(script);
-    } else {
-      ((window as any).FixrWidget) ? initWidget() : script.onload = initWidget;
+    if (!container) return;
+
+    // Clear any previous script instance inside the container
+    container.innerHTML = '';
+    setIsLoading(true);
+
+    const existingScript = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (existingScript) {
+      container.appendChild(existingScript);
+      setIsLoading(false);
+      return;
     }
+
+    const script = document.createElement('script');
+    script.id = scriptId;
+    script.src = "https://web-cdn.fixr.co/scripts/fixr-shop-widget.v1.min.js";
+    script.async = true;
+    script.setAttribute('data-fixr-shop-id', 'f3717626-1c33-4870-a80d-8fa5a61fa568');
+    script.onload = () => setIsLoading(false);
+    script.onerror = () => setIsLoading(false);
+
+    container.appendChild(script);
   }, []);
 
   return (
@@ -542,7 +679,7 @@ const EventsPage = () => {
       <PageHero
         title="THE LINEUP"
         subtitle="DJs & EVENTS"
-        imageSrc="https://images.unsplash.com/photo-1565034946487-077786996e27?q=80&w=1200"
+        imageSrc="/events-header.jpg"
       />
 
       <section className="py-24 px-6">
@@ -596,16 +733,101 @@ const BookPage = () => {
       <PageHero
         title="RESERVATIONS"
         subtitle="BOOK A TABLE"
-        imageSrc="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1200"
+        imageSrc="/booking-header.jpg"
       />
 
       <section className="py-24 px-6">
         <div className="container mx-auto">
+          {/* Intro + party mood */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
+            <div className="lg:col-span-2">
+              <p className="text-[#f29100] text-sm font-black uppercase tracking-[0.4em] mb-4">
+                Choose Your Party Mood
+              </p>
+              <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-white mb-6 leading-tight">
+                OUR TABLES <br className="hidden md:block" /> &amp; SPACES
+              </h2>
+              <p className="text-[11px] md:text-xs font-bold uppercase tracking-[0.25em] text-white/60 mb-6 max-w-xl">
+                Orange Rooms is Southampton&apos;s finest independent bar with a whole range of tables and spaces
+                available every night of the week. Pick the vibe that matches your night, then complete your booking
+                through our DesignMyNight widget below.
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-[10px] font-black uppercase tracking-[0.25em] text-white/70">
+                <span className="px-4 py-2 rounded-full border border-white/10">CASSETTE BOOTHS</span>
+                <span className="px-4 py-2 rounded-full border border-white/10">TIKI BOOTHS</span>
+                <span className="px-4 py-2 rounded-full border border-white/10">GARDEN TABLES</span>
+                <span className="px-4 py-2 rounded-full border border-white/10">DANCEFLOOR</span>
+                <span className="px-4 py-2 rounded-full border border-white/10">OFF PISTE LOUNGE</span>
+                <span className="px-4 py-2 rounded-full border border-white/10">FULL VENUE HIRE</span>
+              </div>
+            </div>
+            <div className="bg-[#0A0A0A] rounded-[2.5rem] border border-white/5 p-6 flex flex-col justify-between">
+              <h3 className="text-sm font-black uppercase italic tracking-[0.25em] text-white mb-4">
+                QUICK BOOKING TIPS
+              </h3>
+              <ul className="space-y-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white/60">
+                <li>• PICK YOUR DATE, ARRIVAL TIME &amp; GROUP SIZE.</li>
+                <li>• SELECT A TABLE OR SPACE THAT SUITS YOUR VIBE.</li>
+                <li>• ADD ANY OCCASION NOTES OR SPECIAL REQUESTS.</li>
+                <li>• CONFIRM YOUR BOOKING SECURELY VIA DESIGNMYNIGHT.</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Tables and spaces overview */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-20">
+            <div className="bg-[#0A0A0A] p-10 rounded-[3rem] border border-white/5">
+              <h3 className="text-2xl font-black uppercase italic text-white mb-4">Our Tables</h3>
+              <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.25em] text-white/60 mb-5">
+                Perfect for smaller groups who want to be close to the action but still have a home base for the night.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white/70">
+                {[
+                  'FISH TANK TABLES',
+                  'HIGH BAR TABLES',
+                  'NEON BOOTHS',
+                  'GARDEN TABLES',
+                  'DANCE FLOOR TABLES',
+                  'SMALL CASSETTE BOOTHS',
+                  'LARGE CASSETTE BOOTHS',
+                  'SMALL DANCEFLOOR BOOTHS',
+                ].map((item) => (
+                  <div key={item} className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-[#0A0A0A] p-10 rounded-[3rem] border border-white/5">
+              <h3 className="text-2xl font-black uppercase italic text-white mb-4">Our Spaces</h3>
+              <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.25em] text-white/60 mb-5">
+                For bigger celebrations and takeovers, choose from full venue, half venue and our iconic concept rooms.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white/70">
+                {[
+                  'FULL VENUE',
+                  'HALF VENUE',
+                  'TIKI LOUNGE',
+                  'OFF PISTE',
+                  'MILE HIGH',
+                  'OUTSIDE ORANGE',
+                ].map((item) => (
+                  <div key={item} className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* DesignMyNight embed */}
           <div className="max-w-4xl mx-auto rounded-[3rem] overflow-hidden bg-white relative min-h-[700px]">
             {isLoading && (
               <div className="absolute inset-0 flex flex-col items-center justify-center space-y-6 bg-white z-20">
                 <div className="w-12 h-12 border-4 border-t-[#f29100] border-black/10 rounded-full animate-spin" />
-                <p className="font-black uppercase tracking-[0.3em] text-[10px] text-black/40">Connecting to DesignMyNight...</p>
+                <p className="font-black uppercase tracking-[0.3em] text-[10px] text-black/40">
+                  Connecting to DesignMyNight...
+                </p>
               </div>
             )}
             <div className="p-4 md:p-8">
@@ -628,38 +850,183 @@ const BookPage = () => {
 
 const BrunchPage = () => (
   <div className="bg-[#050505]">
-    <PageHero title="BOTTOMLESS BRUNCH" subtitle="THE BEST IN SOUTHAMPTON" imageSrc="https://images.unsplash.com/photo-1525268771113-32d9e9bb2d40?q=80&w=1200" />
-    <section className="py-32 px-6">
+    <PageHero
+      title="BOTTOMLESS COCKTAILS"
+      subtitle="SOUTHAMPTON'S ORIGINAL"
+      imageSrc="/bottomless-header.jpg.jpg"
+    >
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button className="!px-10 !py-4 text-[11px]">
+          BOOK SUN–FRI
+        </Button>
+        <Button variant="outline" className="!px-10 !py-4 text-[11px]">
+          BOOK SATURDAY
+        </Button>
+      </div>
+    </PageHero>
+
+    {/* Overview */}
+    <section className="py-24 px-6 bg-[#050505]">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
           <div>
-            <p className="text-[#f29100] text-sm font-black uppercase tracking-[0.4em] mb-6">Unbeatable Value</p>
-            <h2 className="text-4xl md:text-7xl font-black italic uppercase tracking-tighter text-white mb-8 leading-tight">£30 OF PURE <br /> VIBE</h2>
-            <p className="text-xl font-bold text-white/60 leading-relaxed uppercase tracking-widest mb-12">
-              Two hours of bottomless prosecco, beer, or our signature cocktails. Paired with a gourmet burger and the city's finest DJs.
+            <p className="text-[#f29100] text-sm font-black uppercase tracking-[0.4em] mb-6">
+              Every Day • Wristband • 2 Hours
             </p>
-            <div className="flex gap-4">
-              <Button className="!px-12 !py-5">BOOK SATURDAY</Button>
-              <Button variant="outline" className="!px-12 !py-5">BOOK SUNDAY</Button>
+            <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white mb-6 leading-tight">
+              GO BOTTOMLESS <br /> FROM ONLY £25PP
+            </h2>
+            <p className="text-sm md:text-base font-bold text-white/60 leading-relaxed uppercase tracking-[0.25em] mb-8">
+              Choose your session, pick your table mood, and enjoy two hours of unlimited cocktails with your crew.
+              Water is freely available and our team will keep you topped up – responsibly.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {['2 HOUR SESSION', 'WRISTBAND ON ARRIVAL', 'ONE DRINK AT A TIME', 'WALK-UPS SUBJECT TO AVAILABILITY'].map((chip) => (
+                <span
+                  key={chip}
+                  className="px-4 py-2 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-[0.25em] text-white/70"
+                >
+                  {chip}
+                </span>
+              ))}
             </div>
           </div>
-          <div className="rounded-[3rem] overflow-hidden aspect-square border border-white/5">
-            <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=1200" className="w-full h-full object-cover" alt="" />
+          <div className="rounded-[3rem] overflow-hidden border border-white/5 bg-[#0A0A0A] p-10 flex flex-col justify-between min-h-[320px]">
+            <div className="flex items-baseline justify-between mb-6">
+              <div>
+                <p className="text-[#f29100] text-xs font-black uppercase tracking-[0.35em] mb-2">
+                  Sun–Fri Sessions
+                </p>
+                <h3 className="text-3xl font-black uppercase italic text-white tracking-tight">
+                  FROM £25PP
+                </h3>
+              </div>
+              <span className="text-xs font-black uppercase tracking-[0.3em] text-white/50">
+                DAILY
+              </span>
+            </div>
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/60 mb-6">
+              Bottomless cocktails Sunday–Friday using the Orange Rooms booking system. Sessions are available
+              every day – arrive at least 15 minutes before your start time to collect your wristbands.
+            </p>
+            <Button variant="primary" className="w-full !py-4 text-[11px]">
+              VIEW SUN–FRI BOOKINGS
+            </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { title: 'Unlimited Drinks', desc: 'Prosecco, Beer, & Cocktails' },
-            { title: 'Gourmet Food', desc: 'Legendary Orange Burger' },
-            { title: 'Live Energy', desc: 'Best DJs in the City' }
-          ].map((item, i) => (
-            <div key={i} className="bg-[#0A0A0A] p-12 rounded-[2.5rem] border border-white/5 hover:border-[#f29100]/40 transition-all">
-              <Plus className="w-8 h-8 text-[#f29100] mb-8" />
-              <h3 className="text-2xl font-black uppercase italic mb-2">{item.title}</h3>
-              <p className="text-white/40 font-bold uppercase text-xs tracking-widest">{item.desc}</p>
+        {/* Sun–Fri vs Saturday tiles */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-24">
+          <div className="bg-[#0A0A0A] p-10 rounded-[2.5rem] border border-white/5 hover:border-[#f29100]/40 transition-all">
+            <span className="inline-block px-4 py-1 rounded-full bg-[#f29100] text-black text-[10px] font-black uppercase tracking-[0.3em] mb-6">
+              Sun–Fri
+            </span>
+            <h3 className="text-2xl md:text-3xl font-black uppercase italic text-white mb-4">
+              Bottomless Cocktails Sunday–Friday
+            </h3>
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/60 mb-4">
+              FROM ONLY £25PP • EVENING SESSIONS
+            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/40 mb-6">
+              Book a table with bottomless cocktails Sunday–Friday through our online booking system. You&apos;ll get a
+              2-hour slot, a wristband on arrival and access to our full bottomless cocktail list.
+            </p>
+            <Button variant="outline" className="!px-10 !py-4 text-[11px]">
+              BOOK SUN–FRI
+            </Button>
+          </div>
+          <div className="bg-[#0A0A0A] p-10 rounded-[2.5rem] border border-white/5 hover:border-[#f29100]/40 transition-all">
+            <span className="inline-block px-4 py-1 rounded-full bg-white text-black text-[10px] font-black uppercase tracking-[0.3em] mb-6">
+              Saturdays
+            </span>
+            <h3 className="text-2xl md:text-3xl font-black uppercase italic text-white mb-4">
+              Bottomless Cocktails Every Saturday
+            </h3>
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/60 mb-4">
+              ONLY £27 • 2PM–5PM & 6PM–9PM
+            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/40 mb-6">
+              Upgrade your Saturday for just £5 to include bottomless beer and Prosecco. Pick from two time slots,
+              bring the squad and let our DJs handle the soundtrack.
+            </p>
+            <Button variant="primary" className="!px-10 !py-4 text-[11px]">
+              BOOK SATURDAY SESSIONS
+            </Button>
+          </div>
+        </div>
+
+        {/* Cocktail line-up */}
+        <div className="mb-24">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-10">
+            <div>
+              <p className="text-[#f29100] text-sm font-black uppercase tracking-[0.4em] mb-4">
+                Choose Your Poison
+              </p>
+              <h3 className="text-3xl md:text-5xl font-black uppercase italic text-white tracking-tighter leading-tight">
+                THE BOTTOMLESS <br /> COCKTAIL LINE-UP
+              </h3>
             </div>
-          ))}
+            <p className="text-xs md:text-sm font-bold uppercase tracking-[0.25em] text-white/50 max-w-md">
+              Each guest can order one drink at a time and must finish their glass before ordering the next.
+              Our team serves responsibly and may refuse service at their discretion.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              'PINA COLADA',
+              'PORNSTAR MARTINI',
+              'SEX / SPECS ON THE BEACH',
+              'COSMOPOLITAN',
+              'JUNE BUG',
+              'ORANGE LONG ISLAND',
+              'STRAWBERRY WOOWOO',
+              'PINK GIN FIZZ',
+              'SEASONAL SPECIALS'
+            ].map((name) => (
+              <div
+                key={name}
+                className="bg-[#0A0A0A] p-8 rounded-[2.5rem] border border-white/5 flex items-center justify-between gap-4"
+              >
+                <div>
+                  <h4 className="text-sm font-black uppercase italic tracking-[0.25em] text-white">
+                    {name}
+                  </h4>
+                </div>
+                <Wine className="w-6 h-6 text-[#f29100]" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* How it works + Terms */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-12">
+          <div className="bg-[#0A0A0A] p-10 rounded-[3rem] border border-white/5">
+            <h3 className="text-2xl font-black uppercase italic text-white mb-6">
+              HOW IT WORKS
+            </h3>
+            <ol className="space-y-4 text-xs font-bold uppercase tracking-[0.25em] text-white/60">
+              <li>1. BOOK YOUR TABLE ONLINE FOR YOUR CHOSEN SESSION.</li>
+              <li>2. ARRIVE AT LEAST 15 MINUTES BEFORE YOUR START TIME.</li>
+              <li>3. COLLECT YOUR WRISTBAND AND TAKE YOUR SEATS.</li>
+              <li>4. ORDER ONE COCKTAIL AT A TIME FROM THE BOTTOMLESS MENU.</li>
+              <li>5. FINISH YOUR DRINK BEFORE ORDERING ANOTHER.</li>
+              <li>6. BE READY TO VACATE YOUR SEATS 15 MINUTES BEFORE THE END.</li>
+            </ol>
+          </div>
+          <div className="bg-[#0A0A0A] p-10 rounded-[3rem] border border-white/5">
+            <h3 className="text-2xl font-black uppercase italic text-white mb-6">
+              KEY TERMS & CONDITIONS
+            </h3>
+            <ul className="space-y-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white/60">
+              <li>• BOOKINGS MUST BE MADE IN ADVANCE THROUGH THE WEBSITE TICKET / BOOKING LINK.</li>
+              <li>• VALID FOR 2 HOURS ONLY. LATE ARRIVALS MAY LOSE TIME OR HAVE BOOKINGS CANCELLED.</li>
+              <li>• NOT VALID IN CONJUNCTION WITH ANY OTHER OFFER OR PROMOTION.</li>
+              <li>• WE SERVE RESPONSIBLY AND MAY REFUSE SERVICE AT THE TEAM&apos;S DISCRETION.</li>
+              <li>• WATER IS FREELY AVAILABLE THROUGHOUT YOUR SESSION.</li>
+              <li>• WE RESERVE THE RIGHT TO STOP OR AMEND THE OFFER AT ANY TIME.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -668,14 +1035,40 @@ const BrunchPage = () => (
 
 const DrinksPage = () => (
   <div className="bg-[#050505]">
-    <PageHero title="COCKTAILS" subtitle="MIXOLOGY ART" imageSrc="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1200" />
+    <PageHero
+      title="COCKTAILS"
+      subtitle="NEW SUMMER MENU"
+      imageSrc="/drinks-header.jpg"
+    >
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button className="!px-10 !py-4 text-[11px]">
+          VIEW SUMMER MENU
+        </Button>
+        <Button variant="outline" className="!px-10 !py-4 text-[11px]">
+          COCKTAIL MASTERCLASS
+        </Button>
+      </div>
+    </PageHero>
+
     <section className="py-32 px-6">
       <div className="container mx-auto">
-        <div className="text-center mb-24">
-          <p className="text-[#f29100] text-sm font-black uppercase tracking-[0.4em] mb-6">Signature Selection</p>
-          <h2 className="text-5xl md:text-8xl font-black italic uppercase text-white tracking-tighter">THE MENU</h2>
+        {/* Intro */}
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <p className="text-[#f29100] text-sm font-black uppercase tracking-[0.4em] mb-6">
+            Signature Selection
+          </p>
+          <h2 className="text-5xl md:text-7xl font-black italic uppercase text-white tracking-tighter mb-6">
+            THE NEW DRINKS MENU
+          </h2>
+          <p className="text-xs md:text-sm font-bold uppercase tracking-[0.25em] text-white/60">
+            From tiki sharers in the Neon Garden to espresso martinis in the Velvet Lounge, every drink
+            on our list is built for the dancefloor. Explore our new summer serves, classics and
+            low &amp; no options.
+          </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        {/* Signature grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           {[
             { name: 'TIKI POWER BLAST', desc: 'Dark Rum, Pineapple, Secret Spices', price: '£10.50' },
             { name: 'ORANGE VELVET', desc: 'Vodka, Fresh Orange, Vanilla Silk', price: '£9.50' },
@@ -684,18 +1077,255 @@ const DrinksPage = () => (
             { name: 'MIDNIGHT MARTINI', desc: 'Espresso, Coffee Liqueur, Gold Dust', price: '£11.50' },
             { name: 'GARDEN FIZZ', desc: 'Gin, Elderflower, Cucumber Sprint', price: '£9.50' }
           ].map((drink, i) => (
-            <div key={i} className="p-10 bg-[#0A0A0A] rounded-[3rem] border border-white/5 hover:border-[#f29100]/40 transition-all flex flex-col items-center text-center group">
+            <div
+              key={i}
+              className="p-10 bg-[#0A0A0A] rounded-[3rem] border border-white/5 hover:border-[#f29100]/40 transition-all flex flex-col items-center text-center group"
+            >
               <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-8 group-hover:bg-[#f29100] transition-colors">
                 <Wine className="w-8 h-8 text-white group-hover:text-black" />
               </div>
-              <h3 className="text-2xl font-black uppercase italic mb-2 tracking-tighter">{drink.name}</h3>
-              <p className="text-white/40 font-bold uppercase text-[10px] tracking-widest mb-6">{drink.desc}</p>
+              <h3 className="text-2xl font-black uppercase italic mb-2 tracking-tighter">
+                {drink.name}
+              </h3>
+              <p className="text-white/40 font-bold uppercase text-[10px] tracking-widest mb-6">
+                {drink.desc}
+              </p>
               <span className="text-[#f29100] font-black text-2xl">{drink.price}</span>
             </div>
           ))}
         </div>
-        <div className="mt-24 text-center">
-          <Button variant="outline" className="!px-16 !py-5">VIEW FULL DRINKS LIST (PDF)</Button>
+
+        {/* Visual menu spreads */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-24">
+          <div className="rounded-[3rem] overflow-hidden border border-white/5 bg-[#0A0A0A]">
+            <img
+              src="/drinks-menu-outside.png"
+              alt="Orange Rooms summer drinks menu – front"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="rounded-[3rem] overflow-hidden border border-white/5 bg-[#0A0A0A]">
+            <img
+              src="/drinks-menu-inside.png"
+              alt="Orange Rooms summer drinks menu – inside"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+
+        {/* Sections row */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+          {[
+            { title: 'TIKI & SHARERS', desc: 'Big serves and sharers built for groups and birthdays.' },
+            { title: 'CLASSICS & TWISTS', desc: 'Margaritas, martinis and Orange Rooms signatures.' },
+            { title: 'LOW & NO', desc: 'Full-flavour alcohol-free cocktails for designated drivers.' }
+          ].map((item) => (
+            <div
+              key={item.title}
+              className="bg-[#0A0A0A] p-10 rounded-[2.5rem] border border-white/5 hover:border-[#f29100]/40 transition-all"
+            >
+              <Plus className="w-8 h-8 text-[#f29100] mb-6" />
+              <h3 className="text-2xl font-black uppercase italic mb-3">
+                {item.title}
+              </h3>
+              <p className="text-white/40 font-bold uppercase text-[10px] tracking-[0.25em]">
+                {item.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Cocktail Masterclass section */}
+        <div className="bg-[#0A0A0A] rounded-[3.5rem] border border-white/5 overflow-hidden relative mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+            <div className="p-12 md:p-16 flex flex-col justify-center">
+              <p className="text-[#f29100] text-sm font-black uppercase tracking-[0.4em] mb-4">
+                Cocktail Masterclasses
+              </p>
+              <h3 className="text-3xl md:text-5xl font-black uppercase italic text-white tracking-tighter mb-6 leading-tight">
+                SHAKE, STIR &amp; SIP
+              </h3>
+              <p className="text-xs md:text-sm font-bold uppercase tracking-[0.25em] text-white/60 mb-6">
+                Learn the stories behind our most iconic serves and step behind the bar with our team.
+                Perfect for hen parties, staff socials and birthday nights with a twist.
+              </p>
+              <ul className="space-y-2 text-[10px] font-bold uppercase tracking-[0.25em] text-white/50 mb-8">
+                <li>• WELCOME DRINK ON ARRIVAL.</li>
+                <li>• HANDS-ON TUITION WITH OUR BARTENDERS.</li>
+                <li>• MAKE (AND DRINK) MULTIPLE COCKTAILS EACH.</li>
+                <li>• UPGRADE PACKAGES AVAILABLE FOR GROUPS.</li>
+              </ul>
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  variant="primary"
+                  className="!px-12 !py-4 text-[11px]"
+                  onClick={() =>
+                    window.open(
+                      'https://www.orangerooms.co.uk/new-drinks-menu/cocktail-masterclasses/',
+                      '_blank'
+                    )
+                  }
+                >
+                  VIEW MASTERCLASS INFO
+                </Button>
+                <Button
+                  variant="outline"
+                  className="!px-12 !py-4 text-[11px]"
+                  onClick={() => window.open('https://www.orangerooms.co.uk/contact/', '_blank')}
+                >
+                  ENQUIRE FOR YOUR GROUP
+                </Button>
+              </div>
+            </div>
+            <div className="relative min-h-[260px] lg:min-h-[420px]">
+              <img
+                src="/drinks-menu-outside.png"
+                alt="Cocktail masterclass at Orange Rooms"
+                className="w-full h-full object-cover lg:object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-l from-[#0A0A0A] via-transparent to-transparent lg:bg-gradient-to-l" />
+            </div>
+          </div>
+        </div>
+
+        <p className="text-center text-[10px] font-bold uppercase tracking-[0.25em] text-white/40">
+          MENUS AND PRICING SUBJECT TO CHANGE. PLEASE CHECK IN-VENUE OR ON OUR WEBSITE FOR THE LATEST
+          DRINKS LIST.
+        </p>
+      </div>
+    </section>
+  </div>
+);
+
+const FoodPage = () => (
+  <div className="bg-[#050505]">
+    <PageHero
+      title="BOTTOMLESS FONDUE"
+      subtitle="FOOD • TUESDAY–SUNDAY"
+      imageSrc="/food-header.webp"
+    >
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button className="!px-10 !py-4 text-[11px]">
+          BOOK FONDUE TABLE
+        </Button>
+        <Button
+          variant="outline"
+          className="!px-10 !py-4 text-[11px]"
+          onClick={() => window.open('https://www.orangerooms.co.uk/food/', '_blank')}
+        >
+          VIEW FULL FOOD INFO
+        </Button>
+      </div>
+    </PageHero>
+
+    <section className="py-32 px-6">
+      <div className="container mx-auto">
+        {/* Intro */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
+          <div>
+            <p className="text-[#f29100] text-sm font-black uppercase tracking-[0.4em] mb-6">
+              Food: Tuesday–Sunday
+            </p>
+            <h2 className="text-4xl md:text-6xl font-black italic uppercase text-white tracking-tighter mb-6 leading-tight">
+              BOTTOMLESS <br /> FONDUE EXPERIENCE
+            </h2>
+            <p className="text-xs md:text-sm font-bold uppercase tracking-[0.25em] text-white/60 mb-6">
+              Perfect for date nights, mate nights or pre-party fuel. Dip, swirl and share our new
+              bottomless fondue while the Orange Rooms soundtrack does the rest.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {['SWEET OR SAVOURY', 'PER-GROUP PRICING', 'BOTTOMLESS FONDUE', 'TUESDAY–SUNDAY'].map((chip) => (
+                <span
+                  key={chip}
+                  className="px-4 py-2 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-[0.25em] text-white/70"
+                >
+                  {chip}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-[3rem] overflow-hidden border border-white/5 bg-[#0A0A0A] p-10 flex flex-col justify-between min-h-[320px]">
+            <h3 className="text-2xl md:text-3xl font-black uppercase italic text-white mb-4">
+              Choose Your Style
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-[11px] font-bold uppercase tracking-[0.25em] text-white/70">
+              <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+                <p className="text-[#f29100] mb-3">Sweet</p>
+                <p>FLOWING CHOCOLATE, MARSHMALLOWS &amp; SWEET TREATS.</p>
+              </div>
+              <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+                <p className="text-[#f29100] mb-3">Savoury</p>
+                <p>GOOEY MELTED CHEESE, CURED MEATS &amp; SAVOURY BITES.</p>
+              </div>
+            </div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/50 mt-6">
+              SUBJECT TO AVAILABILITY. PLEASE INFORM US OF ANY ALLERGIES BEFORE ORDERING.
+            </p>
+          </div>
+        </div>
+
+        {/* Pricing grid */}
+        <div className="mb-24">
+          <h3 className="text-2xl md:text-3xl font-black uppercase italic text-white mb-8">
+            PER GROUP PRICING
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            {[
+              { label: '1 PERSON', price: '£7.99' },
+              { label: '2 PEOPLE', price: '£14.95' },
+              { label: '3 PEOPLE', price: '£19.95' },
+              { label: '4 PEOPLE', price: '£24.95' },
+              { label: '5 PEOPLE', price: '£29.95' },
+              { label: '6 PEOPLE', price: '£34.95' },
+            ].map((tier) => (
+              <div
+                key={tier.label}
+                className="bg-[#0A0A0A] p-5 rounded-2xl border border-white/5 text-center flex flex-col justify-center"
+              >
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60 mb-2">
+                  {tier.label}
+                </p>
+                <p className="text-xl font-black text-[#f29100]">{tier.price}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Booking & info */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <div className="bg-[#0A0A0A] p-10 rounded-[3rem] border border-white/5">
+            <h3 className="text-2xl font-black uppercase italic text-white mb-6">
+              BOOK YOUR TABLE
+            </h3>
+            <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.25em] text-white/60 mb-6">
+              Walk ups are welcome, but we always recommend booking to secure your fondue spot.
+              You can book a table online or get in touch with the team directly.
+            </p>
+            <ul className="space-y-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white/60 mb-6">
+              <li>• CALL US ON 023 8023 2333.</li>
+              <li>• EMAIL INFO@ORANGEROOMS.CO.UK.</li>
+              <li>• MESSAGE US ON FACEBOOK OR INSTAGRAM.</li>
+            </ul>
+            <Button
+              variant="primary"
+              className="w-full !py-4 text-[11px]"
+              onClick={() => window.open('https://www.orangerooms.co.uk/food/', '_blank')}
+            >
+              BOOK FOOD TABLE
+            </Button>
+          </div>
+          <div className="bg-[#0A0A0A] p-10 rounded-[3rem] border border-white/5">
+            <h3 className="text-2xl font-black uppercase italic text-white mb-6">
+              GOOD TO KNOW
+            </h3>
+            <ul className="space-y-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white/60">
+              <li>• FONDUE IS AVAILABLE TUESDAY–SUNDAY.</li>
+              <li>• PRICING IS PER GROUP, NOT PER PERSON.</li>
+              <li>• OPTIONS AVAILABLE FOR SWEET OR SAVOURY SESSIONS.</li>
+              <li>• PLEASE LET US KNOW ABOUT DIETARY REQUIREMENTS.</li>
+              <li>• MENUS AND PRICING MAY CHANGE – CHECK IN-VENUE FOR THE LATEST.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -799,46 +1429,63 @@ const ContactPage = () => (
 // --- Layout Wrapper ---
 
 const Footer = ({ setView }: { setView: (p: Page) => void }) => (
-  <footer className="bg-[#050505] pt-32 pb-12 text-white border-t border-white/5 overflow-hidden">
+  <footer className="bg-[#412B1D] pt-32 pb-12 text-white border-t border-white/10 overflow-hidden">
     <div className="container mx-auto px-6">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-16 mb-32">
         <div className="lg:col-span-2">
-          <img src="/logo.png" className="h-12 mb-12" alt="" />
-          <h3 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter mb-12 max-w-md">SOUTHAMPTON'S MOST LEGENDARY NIGHTLIFE EXPERIENCE.</h3>
+          <img src="/logo.png" alt="Orange Rooms" className="h-10 mb-12" />
+          <h3 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter mb-12 max-w-md text-white">SOUTHAMPTON'S MOST LEGENDARY NIGHTLIFE EXPERIENCE.</h3>
           <div className="flex gap-4">
-            <Instagram className="w-6 h-6 text-white/40 hover:text-[#f29100] cursor-pointer" />
-            <Facebook className="w-6 h-6 text-white/40 hover:text-[#f29100] cursor-pointer" />
+            <Instagram className="w-6 h-6 text-white/40 hover:text-[#f29100] cursor-pointer transition-colors" />
+            <Facebook className="w-6 h-6 text-white/40 hover:text-[#f29100] cursor-pointer transition-colors" />
+            <Twitter className="w-6 h-6 text-white/40 hover:text-[#f29100] cursor-pointer transition-colors" />
+            <Linkedin className="w-6 h-6 text-white/40 hover:text-[#f29100] cursor-pointer transition-colors" />
           </div>
+          <p className="mt-8 text-white/60 font-bold uppercase tracking-wider text-xs">
+            023 8023 2333 • info@orangerooms.co.uk
+          </p>
         </div>
         <div>
-          <h4 className="text-[#f29100] font-black uppercase tracking-widest text-sm mb-8">Navigation</h4>
+          <h4 className="text-white font-black uppercase tracking-widest text-sm mb-8">Navigation</h4>
           <nav className="flex flex-col gap-4">
             {['HOME', 'EVENTS', 'BRUNCH', 'DRINKS', 'BOOK', 'PRIVATE_HIRE'].map((v) => (
-              <button key={v} onClick={() => setView(v as Page)} className="text-left font-black uppercase italic tracking-tighter text-xl hover:text-[#f29100] transition-colors">
+              <button key={v} onClick={() => setView(v as Page)} className="text-left font-black uppercase italic tracking-tighter text-xl hover:text-white transition-colors">
                 {v.replace('_', ' ')}
               </button>
             ))}
           </nav>
         </div>
         <div>
-          <h4 className="text-[#f29100] font-black uppercase tracking-widest text-sm mb-8">Join the Vibe</h4>
-          <p className="text-white/40 font-bold uppercase tracking-widest text-[10px] mb-6">Stay updated on events and offers.</p>
-          <div className="flex bg-white/5 border border-white/10 rounded-full p-2">
-            <input type="email" placeholder="EMAIL ADDRESS" className="bg-transparent flex-1 px-4 text-white outline-none font-bold uppercase text-[10px]" />
-            <button className="bg-[#f29100] text-black w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform">
-              <ArrowRight className="w-4 h-4" />
-            </button>
+          <h4 className="text-white font-black uppercase tracking-widest text-sm mb-8">Quick Links</h4>
+          <nav className="flex flex-col gap-4">
+            {['Privacy Policy', 'Cookie Policy', 'Terms of Use', 'Jobs', 'Contact'].map((item) => (
+              <button key={item} onClick={() => setView('LEGAL')} className="text-left font-bold uppercase tracking-wider text-[10px] hover:text-white transition-colors">
+                {item}
+              </button>
+            ))}
+          </nav>
+
+          <div className="mt-12">
+            <h4 className="text-white font-black uppercase tracking-widest text-sm mb-6">Join the Vibe</h4>
+            <div className="flex bg-black/5 border border-black/10 rounded-full p-2">
+              <input type="email" placeholder="EMAIL ADDRESS" className="bg-transparent flex-1 px-4 text-black placeholder-black/40 outline-none font-bold uppercase text-[10px]" />
+              <button className="bg-black text-white w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform">
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black uppercase tracking-[0.3em] text-white/20">
+      <div className="pt-12 border-t border-black/10 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black uppercase tracking-[0.3em] text-white/70">
         <p>© 2026 ORANGE ROOMS SOUTHAMPTON</p>
         <div className="flex gap-8">
-          <button onClick={() => setView('LEGAL')}>PRIVACY POLICY</button>
-          <button onClick={() => setView('LEGAL')}>TERMS OF USE</button>
+          <button onClick={() => setView('LEGAL')}>PRIVACY</button>
+          <button onClick={() => setView('LEGAL')}>TERMS</button>
         </div>
-        <p>MADE BY MILKTREE</p>
+        <a href="https://milktreeagency.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-2">
+          MADE BY MILKTREE <Sparkles className="w-3 h-3" />
+        </a>
       </div>
     </div>
   </footer>
@@ -859,6 +1506,7 @@ const App = () => {
       case 'EVENTS': return <EventsPage />;
       case 'BRUNCH': return <BrunchPage />;
       case 'DRINKS': return <DrinksPage />;
+      case 'FOOD': return <FoodPage />;
       case 'BOOK': return <BookPage />;
       case 'PRIVATE_HIRE': return <PrivateHirePage />;
       case 'GALLERY': return <GalleryPage />;
